@@ -1,19 +1,26 @@
 <html>
     <head>
         <title>Simple chat o' rama</title>
+        <style type="text/css">
+        .messagelist{
+            list-style-type: none;
+        }
+        </style>
     </head>
     <body>
         <div>
-            <p>
-                <label for="messageText">Message</label>
-                <input type="text" id="messageText"/>
-            </p>
-            <p>
-                <button id="sendButton">Send</button>
-            </p>
+            <form id="sendForm">
+                <p>
+                    <label for="messageText">Message</label>
+                    <input type="text" id="messageText"/>
+                </p>
+                <p>
+                    <button id="sendButton">Send</button>
+                </p>
+            </form>
         </div>
         <div>
-            <ul id="messages">
+            <ul id="messages" class="messagelist">
             </ul>
         </div>
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
@@ -26,7 +33,6 @@
                 webSocket.on('connect', function() {
                     $('#messages').append('<li>Connected to the server.</li>');
                 });
-
                 webSocket.on('message', function(message) {
                     $('#messages').append('<li>' + message + '</li>');
                 });
@@ -35,10 +41,12 @@
                     $('#messages').append('<li>Disconnected from the server.</li>');
                 });
 
-                $('#sendButton').bind('click', function() {
+                $('#sendForm').bind('submit', function(e) {
+                    e.preventDefault();
                     var message = $('#messageText').val();
                     webSocket.emit("message", message);
                     $('#messageText').val('');
+                    return false;
                 });
             });
         </script>

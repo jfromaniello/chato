@@ -10,7 +10,8 @@ module.exports = function (app) {
         client.on('message', function(message) {
             if(!userName) {
                 userName = message;
-                client.broadcast.emit('message', message + ' has entered the zone.');
+                client.broadcast.emit('message', message + ' has entered the chat.');
+                client.emit("message", "hello " + userName + "! welcome to the super mega chat!");
                 return;
             }
 
@@ -21,7 +22,7 @@ module.exports = function (app) {
         });
 
         client.on('disconnect', function() {
-            var broadcastMessage = userName + ' has left the zone.';
+            var broadcastMessage = userName + ' has left the chat.';
             client.broadcast.emit('message', broadcastMessage);
         });
     });
